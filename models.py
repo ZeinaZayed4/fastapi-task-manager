@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from enum import Enum
 from typing import Optional
 from sqlmodel import SQLModel, Field
@@ -25,7 +25,7 @@ class Task(SQLModel, table=True):
     description: Optional[str] = Field(default=None, max_length=1000)
     status: TaskStatus = Field(default=TaskStatus.pending)
     priority: TaskPriority = Field(default=TaskPriority.medium)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime] = Field(default=None)
     due_date: Optional[datetime] = Field(default=None)
     assigned_to: Optional[str] = Field(default=None, max_length=100)
@@ -47,7 +47,7 @@ class TaskCreate(SQLModel):
 
     @validator('due_date')
     def validate_due_date(cls, v):
-        if v and v <= datetime.now(UTC):
+        if v and v <= datetime.now():
             raise ValueError('Due date must be in the future')
         return v
 
@@ -70,7 +70,7 @@ class TaskUpdate(SQLModel):
 
     @validator('due_date')
     def validate_due_date(cls, v):
-        if v and v <= datetime.now(UTC):
+        if v and v <= datetime.now():
             raise ValueError('Due date must be in the future')
         return v
 

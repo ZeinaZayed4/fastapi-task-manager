@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import List, Optional
 from sqlmodel import Session, select, func
 from models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
@@ -60,7 +60,7 @@ def update_task(session: Session, task_id: int, task_update: TaskUpdate) -> Opti
     
     update_data = task_update.dict(exclude_unset=True)
     if update_data:
-        update_data["updated_at"] = datetime.now(UTC)
+        update_data["updated_at"] = datetime.now()
         for field, value in update_data.items():
             setattr(db_task, field, value)
         
